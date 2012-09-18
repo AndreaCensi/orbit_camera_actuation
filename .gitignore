@@ -10,3 +10,12 @@
 *.lai
 *.la
 *.a
+
+# Binary folder
+camera_actuator/msg_gen
+camera_actuator/bin
+camera_actuator/build
+camera_actuator/src/msg
+
+# Temporary files
+*.*~
