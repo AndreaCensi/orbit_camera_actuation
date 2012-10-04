@@ -16,12 +16,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-#uncomment if you have defined messages
 rosbuild_genmsg()
-#uncomment if you have defined services
-#rosbuild_gensrv()
+rosbuild_gensrv()
 
-rosbuild_add_executable(camera_actuator_node src/cam_actuator_node.cc src/CreeperCam.cc src/controls.cc)
+rosbuild_add_executable(camera_actuator_node src/cam_actuator_node.cc src/CreeperCam.cc src/controls.cc src/CameraConfiguration.cc)
 target_link_libraries(camera_actuator_node /usr/lib/libwebcam.so.0.2.1)
 
 rosbuild_add_executable(test_noros src/test_noros.cc src/CreeperCam.cc src/controls.cc)

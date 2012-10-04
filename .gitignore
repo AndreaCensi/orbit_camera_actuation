@@ -11,11 +11,18 @@
 *.la
 *.a
 
+
 # Binary folder
 camera_actuator/msg_gen
+camera_actuator/srv_gen
 camera_actuator/bin
 camera_actuator/build
 camera_actuator/src/msg
+camera_actuator/src/srv
+camera_actuator/src/camera_actuator
 
 # Temporary files
 *.*~
+.metadata
+camera_actuator/.project
+camera_actuator/.pydevproject

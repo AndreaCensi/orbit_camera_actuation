@@ -35,8 +35,8 @@ CreeperCam::CreeperCam(void) {
 	this->max_tilt = 1400;
 	this->min_tilt = -1600;
 
-	this->Reset();
-	this->stall(STALLTIME);
+//	this->Reset();
+//	this->stall(STALLTIME);
 }
 
 /* Closes the device */ 
