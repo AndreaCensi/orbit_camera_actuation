@@ -18,7 +18,7 @@ class PlanExecuter:
         self.plan = msg.data
         
     def handle_execute_plan(self, req):
-        plan = req.plan.data
+        plan = req.plan
         for cmd_index in plan:
             self.executeCommand(cmd_index)
         return 1
@@ -72,9 +72,9 @@ class PlanExecuter:
                     print('Error: could not interpret the input')
                     
                 planExecute = rospy.ServiceProxy('/logitech_cam/executePlan', planCommand)
-                command = planCommand()
-                command.data = plan
-                resp1 = planExecute(command)
+#                command = planCommand()
+#                command.data = plan
+                resp1 = planExecute(plan)
             
             
 

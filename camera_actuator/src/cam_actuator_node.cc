@@ -1,13 +1,16 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include <sensor_msgs/Image.h>
 #include "CreeperCam.h"
 #include "camera_actuator/voidService.h"
+#include "camera_actuator/imageService.h"
 #include "camera_actuator/CamCmd.h"
 #include "camera_actuator/IntArray.h"
 #include <cmath>
 #include "CameraConfiguration.h"
 #include <sstream>
 #include <ctime>
+#include <unistd.h>
 CreeperCam *camera;
 CameraConfiguration *camconf;
 ros::Publisher pub;
@@ -20,7 +23,36 @@ ros::Publisher pub;
  * Adam 7/10/12
  */
 double reserved_time = 0.0;
-
+int image_requested = 0;
+sensor_msgs::Image image;
+void receive_image(const sensor_msgs::Image msg)
+{
+//	ROS_INFO("image_requested %d", image_requested);
+//	if(image_requested > 0)
+//	{
+//		ROS_INFO("Taking image");
+		image = msg;
+//		image_requested = 0;
+//	}
+}
+bool take_image(camera_actuator::imageService::Request &req,
+		camera_actuator::imageService::Response &res)
+{
+	ROS_INFO("Try to take image");
+//	image_requested = 1;
+//	usleep(500000);
+//	while(image_requested){
+//		usleep(500000);
+//		ROS_INFO("Wating for image");
+//	}
+	try{
+		res.image = image;
+		return true;
+	}
+	catch(char *str){
+		return false;
+	}
+}
 void receive_callback(const camera_actuator::IntArray msg)
 {
 	ROS_INFO("Received command");
@@ -98,6 +130,9 @@ int main(int argc, char **argv)
 	pub = n.advertise<camera_actuator::IntArray>("/logitech_cam/camera_executed",1000);
 	ros::Subscriber sub = n.subscribe("/logitech_cam/camera_instr",1000, receive_callback);
 	ros::ServiceServer service = n.advertiseService("/logitech_cam/cameraBusy", waitIdel);
+
+	ros::Subscriber sub_image = n.subscribe("/usb_cam/image_raw",1000, receive_image);
+	ros::ServiceServer service_image = n.advertiseService("/logitech_cam/take_image", take_image);
 	ROS_INFO("Camera Ready to take command");
 
 	ros::spin();
