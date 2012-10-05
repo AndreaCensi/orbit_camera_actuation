@@ -18,14 +18,16 @@ class PlanExecuter:
         self.plan = msg.data
         
     def handle_execute_plan(self, req):
-        
-        self.executePlan(req.plan)        
-        
+        plan = req.plan.data
+        for cmd_index in plan:
+            self.executeCommand(cmd_index)
+        return 1
+                    
     def getPlan(self):
         return self.plan
 
     def executeCommand(self, index):
-        this_cmd = self.command_list[cmd_index]
+        this_cmd = self.command_list[index]
             
         print 'Sending command:     ',this_cmd
         self.cmd_publisher.publish(get_msg(this_cmd))
@@ -48,14 +50,32 @@ class PlanExecuter:
         rospy.init_node('plan_executer', anonymous=True)
         self.cmd_publisher = rospy.Publisher('/logitech_cam/camera_instr', IntArray)
         
-        s = rospy.Service('/logitech_camera/executePlan', planCommand, self.handle_execute_plan)
-        
-        sys.stdin.readline()
+        s = rospy.Service('/logitech_cam/executePlan', planCommand, self.handle_execute_plan)
 
-        self.executePlan()
-
-        while not rospy.is_shutdown():        
-            rospy.spin()
+        while not rospy.is_shutdown():
+            line = sys.stdin.readline()
+            if line[:16] == "set command_list":
+                self.command_list = eval(line[17:])
+            elif line[:16] == "get command_list":
+                print('command_list = ', self.command_list)
+            else:
+                try:
+                    if line[0] == '[':
+                        plan = eval(line)
+                        for i in plan:
+                            if not i < len(self.command_list):
+                                print('Invalid plan, %g not available' %i)
+                                plan = []
+                    else:
+                        print('Reusing plan ', plan)
+                except:
+                    print('Error: could not interpret the input')
+                    
+                planExecute = rospy.ServiceProxy('/logitech_cam/executePlan', planCommand)
+                command = planCommand()
+                command.data = plan
+                resp1 = planExecute(command)
+            
             
 
             
