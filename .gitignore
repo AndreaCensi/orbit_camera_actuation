@@ -19,7 +19,6 @@ camera_actuator/bin
 camera_actuator/build
 camera_actuator/src/msg
 camera_actuator/src/srv
-camera_actuator/src/camera_actuator
 
 # Temporary files
 *.*~
