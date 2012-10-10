@@ -6,7 +6,8 @@
 
 class CreeperCam {
 	public:
-		CreeperCam(void);
+//		CreeperCam(void);
+		CreeperCam(const char *name);
 		void Pan(double target_pan);
 		void Tilt(double target_tilt);
 		bool PanRelative(double amount);

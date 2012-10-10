@@ -16,8 +16,17 @@
 
 /* Declares a camera object. Declares a ptz camera device and a chandle for the
    device. Then it resets the pan and tilt */
-CreeperCam::CreeperCam(void) {
+//CreeperCam::CreeperCam(void) {
+//	const char *name = "video0";
+////	this(name);
+//	this = CreeperCam::CreeperCam(name);
+//
+////	this->Reset();
+////	this->stall(STALLTIME);
+//}
 
+CreeperCam::CreeperCam(const char *name)
+{
 	CResult res = c_init();
 	if (res) {
 		printf("Exiting, could not open\n");
@@ -25,18 +34,17 @@ CreeperCam::CreeperCam(void) {
 	}
 
 	// Create the device
-	const char *name = "video0";
+//	const char *name = "video0";
 	this->ptz_handle = c_open_device(name);
 	if (!this->ptz_handle) {
 		printf("Could not open device - error!\n");
 	}
+
+	// TODO: remove hardcoded limits
 	this->max_pan = 4000;
 	this->min_pan = -4000;
 	this->max_tilt = 1400;
 	this->min_tilt = -1600;
-
-//	this->Reset();
-//	this->stall(STALLTIME);
 }
 
 /* Closes the device */ 
