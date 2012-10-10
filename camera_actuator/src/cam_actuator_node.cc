@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle nh;
 	std::string dev;
 	nh.getParam("/device", dev);
-//	ROS_INFO(dev);
+	ROS_INFO(dev.c_str());
 
 	camera = new CreeperCam(dev.c_str());
 	home();
