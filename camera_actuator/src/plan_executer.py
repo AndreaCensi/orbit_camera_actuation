@@ -56,6 +56,7 @@ class PlanExecuter:
         
     def main(self, args):
         print('main()')
+        self.update_command_list()
         if len(args)>1:
             self.plan = eval(args[-1])
         rospy.init_node('plan_executer', anonymous=True)
