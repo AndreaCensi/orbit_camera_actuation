@@ -112,6 +112,13 @@ void home()
 	camera->stall(startup_time);
 	camconf->setZero();
 }
+bool home_srv(camera_actuator::voidService::Request &req,
+		camera_actuator::voidService::Response &res)
+{
+	ROS_INFO("Going to home");
+	home();
+	return true;
+}
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "CameraController");
@@ -128,10 +135,18 @@ int main(int argc, char **argv)
 
 	ros::NodeHandle nh;
 	std::string dev;
-	nh.getParam("/device", dev);
-	ROS_INFO(dev.c_str());
+	if(nh.getParam("/device", dev))
+	{
+		ROS_INFO("Using camera device: ");
+		ROS_INFO(dev.c_str());
+		camera = new CreeperCam(dev.c_str());
+	}
+	else
+	{
+		ROS_INFO("Using camera device: video0");
+		camera = new CreeperCam("video0");
+	}
 
-	camera = new CreeperCam(dev.c_str());
 	home();
 
 	pub = n.advertise<camera_actuator::IntArray>("/logitech_cam/camera_executed",1000);
@@ -141,6 +156,8 @@ int main(int argc, char **argv)
 	ros::Subscriber sub_image = n.subscribe("/usb_cam/image_raw",1000, receive_image);
 	ros::ServiceServer service_image = n.advertiseService("/logitech_cam/take_image", take_image);
 	ROS_INFO("Camera Ready to take command");
+
+	ros::ServiceServer home_service = n.advertiseService("/logitech_cam/home", home_srv);
 
 	ros::spin();
 

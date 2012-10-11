@@ -58,6 +58,9 @@ class PlanExecuter:
                 self.command_list = eval(line[17:])
             elif line[:16] == "get command_list":
                 print('command_list = ', self.command_list)
+            elif line[:6] == "home()":
+                home_srv = rospy.ServiceProxy('/logitech_cam/home', voidService)
+                home_srv(0)
             else:
                 try:
                     if line[0] == '[':
