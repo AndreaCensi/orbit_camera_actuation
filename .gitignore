@@ -10,6 +10,7 @@
 *.lai
 *.la
 *.a
+*.pyc
 
 
 # Binary folder
